@@ -99,13 +99,14 @@ class Network(object):
     def cost_derivative(self, ouput_activations, y):
         return (ouput_activations-y)
     
-    def save(self, filename='model.npz'):
-        path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'model'))
-        os.makedirs(path, exist_ok=True)
-        full_path = os.path.join(path, filename)
-        np.savez_compressed(full_path, 
+    def save(self, filename='digit_model.npz'):
+        # Use absolute path of the current script location
+        print("saved called")
+        save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
+        np.savez_compressed(save_path, 
                             weights=np.array(self.weights, dtype=object), 
                             biases=np.array(self.biases, dtype=object))
+        print(f"Model saved to: {save_path}")
 
     def load(self, filename='model.npz'):
         path = os.path.join('model', filename)
