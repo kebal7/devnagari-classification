@@ -3,7 +3,7 @@ import random
 import os
 
 class Network(object):
-    def __init__(self, sizes):
+    def __init__(self, sizes, model_path=None):
         self.num_layers = len(sizes)
         self.sizes = sizes
         
@@ -18,6 +18,17 @@ class Network(object):
         for x, y in zip(sizes[:-1], sizes[1:]):  # pairs of consecutive layers
             w = np.random.randn(y, x)  # weight matrix with shape (y, x)
             self.weights.append(w)
+
+        # If model_path is provided, try to load weights and biases
+        if model_path is not None:
+            path = os.path.abspath(os.path.expanduser(model_path))
+            if os.path.exists(path):
+                data = np.load(path, allow_pickle=True)
+                self.weights = list(data['weights'])
+                self.biases = list(data['biases'])
+                print(f"Model loaded from: {path}")
+            else:
+                print(f"Model path {path} not found. Initialized randomly.")
 
     def feedforward(self, a):
         #return output of network for 'a' --> vector input
